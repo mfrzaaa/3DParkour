@@ -6,9 +6,6 @@ public class RollingBoulder : MonoBehaviour
     public float initialSpeed = 10f;
     public float sideForce = 5f;
 
-    [Header("Damage Settings")]
-    public float knockbackForce = 20f;
-
     private Rigidbody rb;
 
     private void Start()
@@ -22,22 +19,37 @@ public class RollingBoulder : MonoBehaviour
 
     private void OnCollisionEnter(Collision collision)
     {
+        // JIKA MENABRAK PLAYER
         if (collision.gameObject.CompareTag("Player"))
         {
-            Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
-            if (playerRb != null)
+            // 1. Cari script VoidReset yang ada di Scene
+            // (Kita butuh script ini karena dia yang memegang data Checkpoint terakhir)
+            VoidReset respawnManager = Object.FindAnyObjectByType<VoidReset>(); 
+            // Catatan: Jika error di Unity versi lama, ganti jadi FindObjectOfType<VoidReset>();
+
+            if (respawnManager != null)
             {
-                Vector3 direction = (collision.transform.position - transform.position).normalized;
-                direction += Vector3.up * 0.5f;
-                playerRb.AddForce(direction * knockbackForce, ForceMode.Impulse);
+                // 2. Reset Fisika Player (PENTING!)
+                // Kita harus nol-kan kecepatan player agar dia tidak "terbang" saat muncul di spawn point
+                Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
+                if (playerRb != null)
+                {
+                    playerRb.linearVelocity = Vector3.zero;
+                    playerRb.angularVelocity = Vector3.zero;
+                }
+
+                // 3. Pindahkan posisi Player ke Respawn Point terakhir
+                // (Mengambil variabel 'respawnPoint' milik script VoidReset)
+                collision.transform.position = respawnManager.respawnPoint.position;
+                
+                Debug.Log("Player Mati Tertimpa Batu!");
             }
         }
     }
 
-    // FITUR BARU: Hapus jika kena Trigger bernama "Void" atau Tag "Finish"
+    // Hapus bola jika jatuh ke void atau kena trigger finish
     private void OnTriggerEnter(Collider other)
     {
-        // Pastikan objek Void Anda punya nama "Void" atau Tag "Void"
         if (other.name.Contains("Void") || other.CompareTag("Finish")) 
         {
             Destroy(gameObject);
@@ -46,8 +58,6 @@ public class RollingBoulder : MonoBehaviour
 
     private void Update()
     {
-        // FITUR BARU: Hapus otomatis jika jatuh di bawah ketinggian Y -20
-        // (Jaga-jaga kalau tidak kena trigger Void)
         if (transform.position.y < -20f)
         {
             Destroy(gameObject);
