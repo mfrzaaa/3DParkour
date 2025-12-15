@@ -12,7 +12,7 @@ public class RollingBoulder : MonoBehaviour
     {
         rb = GetComponent<Rigidbody>();
         
-        // Logika Zigzag Awal
+        // Logika Zigzag
         Vector3 randomSide = Random.Range(0, 2) == 0 ? transform.right : -transform.right;
         rb.AddForce((transform.forward * initialSpeed) + (randomSide * sideForce), ForceMode.Impulse);
     }
@@ -23,14 +23,11 @@ public class RollingBoulder : MonoBehaviour
         if (collision.gameObject.CompareTag("Player"))
         {
             // 1. Cari script VoidReset yang ada di Scene
-            // (Kita butuh script ini karena dia yang memegang data Checkpoint terakhir)
             VoidReset respawnManager = Object.FindAnyObjectByType<VoidReset>(); 
-            // Catatan: Jika error di Unity versi lama, ganti jadi FindObjectOfType<VoidReset>();
 
             if (respawnManager != null)
             {
-                // 2. Reset Fisika Player (PENTING!)
-                // Kita harus nol-kan kecepatan player agar dia tidak "terbang" saat muncul di spawn point
+                // 2. Reset Fisika Player
                 Rigidbody playerRb = collision.gameObject.GetComponent<Rigidbody>();
                 if (playerRb != null)
                 {
@@ -39,7 +36,6 @@ public class RollingBoulder : MonoBehaviour
                 }
 
                 // 3. Pindahkan posisi Player ke Respawn Point terakhir
-                // (Mengambil variabel 'respawnPoint' milik script VoidReset)
                 collision.transform.position = respawnManager.respawnPoint.position;
                 
                 Debug.Log("Player Mati Tertimpa Batu!");
@@ -47,7 +43,6 @@ public class RollingBoulder : MonoBehaviour
         }
     }
 
-    // Hapus bola jika jatuh ke void atau kena trigger finish
     private void OnTriggerEnter(Collider other)
     {
         if (other.name.Contains("Void") || other.CompareTag("Finish")) 

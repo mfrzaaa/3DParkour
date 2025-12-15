@@ -7,11 +7,8 @@ public class BreakableDoor : MonoBehaviour
         // Jika yang menabrak adalah Player DAN pintu ini adalah pintu Trigger (palsu)
         if (other.CompareTag("Player") && GetComponent<Collider>().isTrigger == true)
         {
-            // Matikan visual pintunya (seolah-olah pecah/hilang)
-            // Kita disable MeshRenderer-nya
+            // Matikan visual pintunya
             GetComponent<MeshRenderer>().enabled = false;
-            
-            // Opsional: Mainkan suara pecahan kaca di sini
         }
     }
 }

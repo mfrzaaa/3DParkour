@@ -2,11 +2,10 @@ using UnityEngine;
 
 public class VoidReset : MonoBehaviour
 {
-    public Transform respawnPoint; // Tempat pemain akan dikembalikan
+    public Transform respawnPoint;
 
     private void OnTriggerEnter(Collider other)
     {
-        // Cek jika yang jatuh adalah Player (bisa pakai Tag atau cek komponen)
         if (other.CompareTag("Player")) // Pastikan Player punya Tag "Player"
         {
             Rigidbody rb = other.GetComponent<Rigidbody>();

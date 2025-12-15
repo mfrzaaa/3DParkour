@@ -19,9 +19,6 @@ public class Checkpoint : MonoBehaviour
                 voidScript.respawnPoint = newRespawnLocation;
                 
                 Debug.Log("Checkpoint Reached! Respawn point updated.");
-                
-                // Opsional: Matikan checkpoint ini agar tidak dipanggil berkali-kali
-                // gameObject.SetActive(false); 
             }
         }
     }

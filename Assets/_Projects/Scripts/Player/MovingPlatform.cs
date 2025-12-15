@@ -8,10 +8,9 @@ public class MovingPlatform : MonoBehaviour
     public bool moveLeftRight = true;
 
     [Header("Variation")]
-    // Centang ini jika ingin gerakan acak otomatis
+
     public bool useRandomStart = true; 
     
-    // Atau isi manual (0, 0.5, 1, 1.5) jika ingin membuat pola gelombang yang rapi
     public float manualOffset = 0f;
 
     private Vector3 startPosition;
@@ -23,8 +22,6 @@ public class MovingPlatform : MonoBehaviour
 
         if (useRandomStart)
         {
-            // Pilih angka acak antara 0 sampai 100 detik
-            // Ini membuat seolah-olah platform ini sudah bergerak lebih dulu daripada yang lain
             timeOffset = Random.Range(0f, 100f);
         }
         else
@@ -35,7 +32,6 @@ public class MovingPlatform : MonoBehaviour
 
     private void FixedUpdate()
     {
-        // RUMUS BARU: Tambahkan timeOffset ke dalam kurung Time.time
         // Matematika: Sin( (Waktu + WaktuAcak) * Kecepatan )
         float offset = Mathf.Sin((Time.time + timeOffset) * speed) * distance;
 

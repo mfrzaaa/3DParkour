@@ -18,7 +18,6 @@ public class StickyPlatform : MonoBehaviour
         // 2. Jika ada player di atas, geser player sejauh gerakan platform
         if (playerRb != null)
         {
-            // Kita pakai MovePosition agar tetap menghormati collision (tidak tembus tembok)
             playerRb.MovePosition(playerRb.position + platformMovement);
         }
 
@@ -30,7 +29,6 @@ public class StickyPlatform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Ambil Rigidbody player saat mendarat
             playerRb = collision.gameObject.GetComponent<Rigidbody>();
         }
     }
@@ -39,7 +37,6 @@ public class StickyPlatform : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player"))
         {
-            // Lepaskan player saat melompat pergi
             playerRb = null;
         }
     }
